@@ -15,6 +15,11 @@ const style = {
 function App() {
   const [todos, setTodos] = useState(["todo 1", "todo 2", "todo 3"]);
 
+  // Create todo
+  // Read todo from firebase
+  // uodate todo in firebase
+  // delete todo
+
   return (
     <div className={style.bg}>
       <div className={style.container}>

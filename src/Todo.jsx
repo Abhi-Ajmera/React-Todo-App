@@ -16,7 +16,13 @@ export default function Todo(props) {
         <input type="checkbox" />
         <p className={style.text}>{props.todo}</p>
       </div>
-      <button>{<FaRegTrashAlt />}</button>
+      <button
+        onClick={(e) => {
+          props.deleteTodo(props.index);
+        }}
+      >
+        {<FaRegTrashAlt />}
+      </button>
     </li>
   );
 }

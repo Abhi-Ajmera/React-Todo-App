@@ -13,21 +13,59 @@ const style = {
 };
 
 function App() {
-  const [todos, setTodos] = useState(["todo 1", "todo 2", "todo 3"]);
+  const [todos, setTodos] = useState([]);
+  const [inputText, setInputText] = useState("");
+
+  let deleteTodo = (key) => {
+    let newTodos = [...todos];
+    newTodos.splice(key, 1);
+    setTodos(newTodos);
+  };
 
   return (
     <div className={style.bg}>
       <div className={style.container}>
         <h3 className={style.heading}>Todo App</h3>
         <form className={style.form}>
-          <input className={style.input} type="text" placeholder="Add Todo" />
-          <button className={style.button}>
+          <input
+            className={style.input}
+            type="text"
+            placeholder="Add Todo"
+            value={inputText}
+            onChange={(e) => {
+              setInputText(e.target.value);
+            }}
+            // onKeyDown={(e) => {if(e.key === 13){
+            //   console.log(e)
+            // }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setTodos([...todos, inputText]);
+                setInputText("");
+              }
+            }}
+          />
+          <button
+            className={style.button}
+            onClick={(e) => {
+              e.preventDefault();
+              if (inputText != "") {
+                setTodos([...todos, inputText]);
+                setInputText("");
+              }
+            }}
+          >
             <AiOutlinePlus size={30} />
           </button>
         </form>
         <ul>
           {todos.map((todo, index) => (
-            <Todo key={index} todo={todo} />
+            <Todo
+              key={index}
+              index={deleteTodo}
+              todo={todo}
+              deleteTodo={deleteTodo}
+            />
           ))}
         </ul>
         <p className={style.count}>You have these no. of todos</p>

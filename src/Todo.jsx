@@ -11,10 +11,19 @@ const style = {
 
 export default function Todo(props) {
   return (
-    <li className={style.li}>
+    <li className={props.todo.complete ? style.liComplete : style.li}>
       <div className={style.row}>
-        <input type="checkbox" />
-        <p className={style.text}>{props.todo.text}</p>
+        <input
+          onChange={() => props.toggleComplete(props.todo)}
+          type="checkbox"
+          checked={props.todo.complete ? "checked" : ""}
+        />
+        <p
+          onClick={() => props.toggleComplete(props.todo)}
+          className={props.todo.complete ? style.textComplete : style.text}
+        >
+          {props.todo.text}
+        </p>
       </div>
       <button>{<FaRegTrashAlt />}</button>
     </li>

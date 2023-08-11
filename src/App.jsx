@@ -1,6 +1,7 @@
 import { AiOutlinePlus } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Todo from "./Todo";
+import { db, ref, onValue } from "./firebase.js";
 
 const style = {
   bg: `h-screen w-screen p-4 bg-gradient-to-r from-[#2F80ED] to-[#1CB5E0]`,
@@ -13,10 +14,18 @@ const style = {
 };
 
 function App() {
-  const [todos, setTodos] = useState(["todo 1", "todo 2", "todo 3"]);
+  const [todos, setTodos] = useState([]);
 
   // Create todo
   // Read todo from firebase
+  useEffect(() => {
+    const todoRef = ref(db, "/react-todo/");
+    const unsubscribe = onValue(todoRef, (snapshot) => {
+      const data = snapshot.val({ ...todos.text }, data);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // uodate todo in firebase
   // delete todo
 

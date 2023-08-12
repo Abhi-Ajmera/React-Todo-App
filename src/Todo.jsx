@@ -1,4 +1,3 @@
-import { deleteDoc } from "firebase/firestore";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 const style = {
@@ -26,7 +25,9 @@ export default function Todo(props) {
           {props.todo.text}
         </p>
       </div>
-      <button onClick={props.deleteTodo(props.todo.id)}>{<FaRegTrashAlt />}</button>
+      <button onClick={props.deleteTodo(props.todo.id)}>
+        {<FaRegTrashAlt />}
+      </button>
     </li>
   );
 }

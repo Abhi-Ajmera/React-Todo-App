@@ -24,6 +24,7 @@ const style = {
 function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
+  console.log(input);
 
   // Create todo
   const createTodo = async (e) => {
@@ -91,7 +92,7 @@ function App() {
             />
           ))}
         </ul>
-        <p className={style.count}>`You have ${todos.length} no. of todos`</p>
+        <p className={style.count}>{`You have ${todos.length} no. of todos`}</p>
       </div>
     </div>
   );

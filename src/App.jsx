@@ -2,7 +2,14 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import Todo from "./Todo";
 import { db } from "./firebase.js";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  addDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 const style = {
   bg: `h-screen w-screen p-4 bg-gradient-to-r from-[#2F80ED] to-[#1CB5E0]`,
@@ -17,10 +24,19 @@ const style = {
 function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
-  // console.log(input);
+
   // Create todo
   const createTodo = async (e) => {
     e.preventDefault(e);
+    if (input === "") {
+      alert("Please enter something");
+      return;
+    }
+    await addDoc(collection(db, "react-todo"), {
+      text: input,
+      completed: false,
+    });
+    setInput("");
   };
 
   // Read todo from firebase
@@ -35,9 +51,9 @@ function App() {
       setTodos(result);
     };
     getTodos();
-  }, [todos]);
+  }, []);
 
-  // uodate todo in firebase
+  // update todo in firebase
   const toggleComplete = async (todo) => {
     await updateDoc(doc(db, "react-todo", todo.id), {
       complete: !todo.complete,
@@ -45,6 +61,9 @@ function App() {
   };
 
   // delete todo
+  const deleteTodo = async (id) => {
+    await deleteDoc(doc(db, "react-todo", id));
+  };
 
   return (
     <div className={style.bg}>
@@ -55,8 +74,7 @@ function App() {
             type="text"
             placeholder="Add Todo"
             className={style.input}
-            defaultValue="Bob"
-            value={input}
+            defaultValue={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <button className={style.button}>
@@ -65,10 +83,15 @@ function App() {
         </form>
         <ul>
           {todos.map((todo, index) => (
-            <Todo key={index} todo={todo} toggleComplete={toggleComplete} />
+            <Todo
+              key={index}
+              todo={todo}
+              toggleComplete={toggleComplete}
+              deleteTodo={deleteTodo}
+            />
           ))}
         </ul>
-        <p className={style.count}>You have these no. of todos</p>
+        <p className={style.count}>`You have ${todos.length} no. of todos`</p>
       </div>
     </div>
   );

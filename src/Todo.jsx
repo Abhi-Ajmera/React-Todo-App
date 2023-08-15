@@ -9,25 +9,25 @@ const style = {
   button: `cursor-pointer flex items-center`,
 };
 
-export default function Todo(props) {
+function Todo({ todo, toggleComplete, deleteTodo }) {
   return (
-    <li className={props.todo.complete ? style.liComplete : style.li}>
+    <li className={todo.complete ? style.liComplete : style.li}>
       <div className={style.row}>
         <input
-          onChange={() => props.toggleComplete(props.todo)}
+          onChange={() => toggleComplete(todo)}
           type="checkbox"
-          checked={props.todo.complete ? "checked" : ""}
+          checked={todo.complete ? "checked" : ""}
         />
         <p
-          onClick={() => props.toggleComplete(props.todo)}
-          className={props.todo.complete ? style.textComplete : style.text}
+          onClick={() => toggleComplete(todo)}
+          className={todo.complete ? style.textComplete : style.text}
         >
-          {props.todo.text}
+          {todo.text}
         </p>
       </div>
-      <button onClick={props.deleteTodo(props.todo.id)}>
-        {<FaRegTrashAlt />}
-      </button>
+      <button onClick={() => deleteTodo(todo)}>{<FaRegTrashAlt />}</button>
     </li>
   );
 }
+
+export default Todo;

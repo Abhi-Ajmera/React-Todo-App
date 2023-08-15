@@ -24,33 +24,34 @@ const style = {
 function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
-  console.log(input);
+
+  // Get Todo
+  const getTodos = async () => {
+    const data = await getDocs(collection(db, "react-todo"));
+    let todoArray = [];
+    data.forEach((doc) => {
+      todoArray.push({ ...doc.data(), id: doc.id });
+    });
+    setTodos(todoArray);
+  };
 
   // Create todo
   const createTodo = async (e) => {
     e.preventDefault(e);
     if (input === "") {
-      alert("Please enter something");
+      alert("Please enter input");
       return;
     }
     await addDoc(collection(db, "react-todo"), {
       text: input,
-      completed: false,
+      complete: false,
     });
     setInput("");
+    getTodos();
   };
 
-  // Read todo from firebase
+  // read todo from firebase
   useEffect(() => {
-    const getTodos = async () => {
-      const todosRef = collection(db, "react-todo");
-      const data = await getDocs(todosRef);
-      const result = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setTodos(result);
-    };
     getTodos();
   }, []);
 
@@ -59,23 +60,25 @@ function App() {
     await updateDoc(doc(db, "react-todo", todo.id), {
       complete: !todo.complete,
     });
+    getTodos();
   };
 
   // delete todo
-  const deleteTodo = async (id) => {
-    await deleteDoc(doc(db, "react-todo", id));
+  const deleteTodo = async (todo) => {
+    await deleteDoc(doc(db, "react-todo", todo.id));
+    getTodos();
   };
 
   return (
     <div className={style.bg}>
       <div className={style.container}>
         <h3 className={style.heading}>Todo App</h3>
-        <form className={style.form} onSubmit={createTodo}>
+        <form onSubmit={createTodo} className={style.form}>
           <input
             type="text"
             placeholder="Add Todo"
             className={style.input}
-            defaultValue={input}
+            value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <button className={style.button}>
